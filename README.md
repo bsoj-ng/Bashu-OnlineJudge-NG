@@ -2,7 +2,7 @@
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/hydro-dev/hydro/CI)
 ![hydrooj](https://img.shields.io/npm/dm/hydrooj)
-![npm](https://img.shields.io/npm/v/hydrooj?label=Bashu OnlineJudge-NG)
+![npm](https://img.shields.io/npm/v/hydrooj?label=Bashu%20OnlineJudge-NG)
 ![node-current](https://img.shields.io/node/v/hydrooj)
 ![GitHub contributors](https://img.shields.io/github/contributors/hydro-dev/Hydro)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/hydro-dev/Hydro)
