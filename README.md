@@ -11,7 +11,7 @@ bug和功能建议请在 Issues 提出。
 ## 开源许可
 
 本项目基于 AGPL-3.0-or-later 开源。  
-在您部署 Bashu OnlineJudge-NG 时，需要保留底部的 `Powered by Bashu OnlineJudge-NG` 字样，其中的 `Bashu OnlineJudge-NG` 字样需指向 `本仓库/fork` 之一的链接。  
+在您部署 Bashu OnlineJudge-NG 时，需要保留底部的 `Powered by Bashu OnlineJudge-NG` 字样，其中的 `Bashu OnlineJudge-NG` 字样需指向 `本仓库` 的链接。  
 若您对源码做出修改/扩展，同样需要以 AGPL-3.0-or-later 开源，您可以以 `Powered by Bashu OnlineJudge-NG, Modified by xxx` 格式在页脚注明。  
 
 ## 鸣谢
