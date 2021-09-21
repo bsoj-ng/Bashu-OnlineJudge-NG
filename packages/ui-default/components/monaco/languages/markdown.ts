@@ -1,7 +1,7 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import list from 'emojis-list';
 import keyword from 'emojis-keywords';
-import api, { e } from 'vj/utils/api';
+import api, { gql } from 'vj/utils/api';
 
 const qqEmojies = [
   'weixiao',
@@ -123,12 +123,10 @@ monaco.editor.registerCommand('hydro.openUserPage', (accesser, uid) => {
 monaco.languages.registerCodeLensProvider('markdown', {
   async provideCodeLenses(model) {
     const users = model.findMatches('\\[\\]\\(/user/(\\d+)\\)', true, true, true, null, true);
-    const { data } = await api(`
-      query {
-        users(ids: [${users.map((i) => i.matches[1]).join(',')}]) {
-          _id
-          uname
-        }
+    const { data } = await api(gql`
+      users(ids: ${users.map((i) => +i.matches[1])}) {
+        _id
+        uname
       }
     `);
     return {
@@ -167,11 +165,12 @@ monaco.languages.registerCompletionItemProvider('markdown', {
       endColumn: word.endColumn,
     };
     if (prefix === '@') {
-      const users = await api(e`
+      const users = await api(gql`
         users(search: ${word.word}) {
           _id
           uname
           avatarUrl
+          priv
         }
       `, ['data', 'users']);
       return {
@@ -179,8 +178,9 @@ monaco.languages.registerCompletionItemProvider('markdown', {
           label: `@${i.uname} (UID=${i._id})`,
           kind: monaco.languages.CompletionItemKind.Property,
           documentation: { value: `![monaco_avatar](${i.avatarUrl})`, isTrusted: true },
-          insertText: `[](/user/${i._id}) `,
+          insertText: `@[](/user/${i._id}) `,
           range,
+          sortText: i.priv === 0 ? '0' : '1',
           tags: i.priv === 0 ? [1] : [],
         })),
       };

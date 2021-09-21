@@ -242,32 +242,26 @@ const oi: ContestRule = {
                     ? `${tsdoc.uid}/${pid.toString().replace(':', '/')}`
                     : `${tsdoc.uid}/${tdoc.domainId}/${pid}`;
                 // eslint-disable-next-line @typescript-eslint/no-use-before-define
-                if (isDone(tdoc) && tsddict[pid]?.rid?.toHexString() !== psdict[index]?.rid?.toHexString()) {
-                    row.push({
+                const node: ScoreboardNode = isDone(tdoc) && tsddict[pid]?.rid?.toHexString() !== psdict[index]?.rid?.toHexString()
+                    ? {
                         type: 'records',
                         value: '',
-                        raw: [
-                            {
-                                value: tsddict[pid]?.score ?? '-',
-                                raw: tsddict[pid]?.rid || null,
-                            },
-                            {
-                                value: psdict[index]?.score ?? '-',
-                                raw: psdict[index]?.rid ?? null,
-                            },
-                        ],
-                    });
-                } else {
-                    const node: ScoreboardNode = {
+                        raw: [{
+                            value: tsddict[pid]?.score ?? '-',
+                            raw: tsddict[pid]?.rid || null,
+                        }, {
+                            value: psdict[index]?.score ?? '-',
+                            raw: psdict[index]?.rid ?? null,
+                        }],
+                    } : {
                         type: 'record',
                         value: tsddict[pid]?.score ?? '-',
                         raw: tsddict[pid]?.rid || null,
                     };
-                    if (tsddict[pid]?.status === STATUS.STATUS_ACCEPTED && tsddict[pid]?.rid.generationTime === first[pid]) {
-                        node.style = 'background-color: rgb(217, 240, 199);';
-                    }
-                    row.push(node);
+                if (tsddict[pid]?.status === STATUS.STATUS_ACCEPTED && tsddict[pid]?.rid.generationTime === first[pid]) {
+                    node.style = 'background-color: rgb(217, 240, 199);';
                 }
+                row.push(node);
             }
             rows.push(row);
         }

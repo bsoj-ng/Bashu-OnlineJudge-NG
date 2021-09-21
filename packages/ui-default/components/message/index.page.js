@@ -5,7 +5,8 @@ import { FLAG_ALERT } from 'vj/constant/message';
 import i18n from 'vj/utils/i18n';
 import tpl from 'vj/utils/tpl';
 
-const messagePage = new AutoloadPage('messagePage', () => {
+const messagePage = new AutoloadPage('messagePage', (pagename) => {
+  if (pagename === 'home_messages') return;
   let visible = true;
   document.addEventListener('visibilitychange', () => {
     const state = document.visibilityState;
@@ -39,6 +40,12 @@ const messagePage = new AutoloadPage('messagePage', () => {
               <p>${i18n(msg.mdoc.content)}</p>
             </div>`,
         }).open();
+      } else if (msg.udoc._id === 1 && msg.mdoc.flag & 4) {
+        new VjNotification({
+          message: 'You received a system message, click here to view.',
+          duration: 15000,
+          action: () => window.open(`/home/messages?uid=${msg.udoc._id}`, '_blank'),
+        }).show();
       } else {
         // Is message
         new VjNotification({

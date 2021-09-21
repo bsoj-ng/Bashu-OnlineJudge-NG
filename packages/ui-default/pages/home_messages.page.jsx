@@ -1,8 +1,8 @@
 import { NamedPage } from 'vj/misc/Page';
-import api, { e } from 'vj/utils/api';
+import api, { gql } from 'vj/utils/api';
 import loadReactRedux from 'vj/utils/loadReactRedux';
 import parseQueryString from 'vj/utils/parseQueryString';
-
+import VjNotification from 'vj/components/notification';
 import { ActionDialog } from 'vj/components/dialog';
 import UserSelectAutoComplete from 'vj/components/autocomplete/UserSelectAutoComplete';
 
@@ -39,6 +39,16 @@ const page = new NamedPage('home_messages', () => {
         type: 'DIALOGUES_MESSAGE_PUSH',
         payload: msg,
       });
+      new VjNotification({
+        title: msg.udoc.uname,
+        avatar: msg.udoc.avatarUrl,
+        message: msg.mdoc.content,
+        duration: 15000,
+        action: () => store.dispatch({
+          type: 'DIALOGUES_SWITCH_TO',
+          payload: msg.udoc._id,
+        }),
+      }).show();
     };
 
     const userSelector = UserSelectAutoComplete.getOrConstruct($('.dialog__body--user-select [name="user"]'));
@@ -80,7 +90,7 @@ const page = new NamedPage('home_messages', () => {
   async function loadSendTarget() {
     const queryString = parseQueryString();
     if (!queryString.target) return;
-    const user = await api(e`
+    const user = await api(gql`
       users(search: ${queryString.target}, exact: true) {
         _id
         uname

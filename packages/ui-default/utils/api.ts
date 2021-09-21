@@ -13,9 +13,9 @@ export default async (q: string, path: string[] = []) => {
   return cursor;
 };
 
-export const e = (
+export const gql = (
   pieces: TemplateStringsArray,
-  ...templates: (string | number)[]
+  ...templates: (string | number | string[] | number[])[]
 ) => {
   let res = '';
   for (let i = 0; i < pieces.length; i++) {
