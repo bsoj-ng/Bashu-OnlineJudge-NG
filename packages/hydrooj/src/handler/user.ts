@@ -77,11 +77,13 @@ class UserLoginHandler extends Handler {
     @param('redirect', Types.String, true)
     async post(domainId: string, uname: string, password: string, rememberme = false, redirect = '') {
         if (!system.get('server.login')) throw new LoginError('Builtin login disabled.');
-        const udoc = await user.getByUname(domainId, uname);
+        let udoc = await user.getByEmail(domainId, uname);
+        if (!udoc) udoc = await user.getByUname(domainId, uname);
         if (!udoc) throw new UserNotFoundError(uname);
         udoc.checkPassword(password);
         await user.setById(udoc._id, { loginat: new Date(), loginip: this.request.ip });
         if (!udoc.hasPriv(PRIV.PRIV_USER_PROFILE)) throw new BlacklistedError(uname);
+        this.session.viewLang = '';
         this.session.uid = udoc._id;
         this.session.scope = PERM.PERM_ALL.toString();
         this.session.save = rememberme;
@@ -174,7 +176,11 @@ class UserRegisterWithCodeHandler extends Handler {
         const uid = await user.create(tdoc.mail, uname, password, undefined, this.request.ip);
         await token.del(code, token.TYPE_REGISTRATION);
         const [id, domain] = tdoc.mail.split('@');
-        if (domain === 'qq.com' && !Number.isNaN(+id)) await user.setById(uid, { avatar: `qq:${id}` });
+        const $set: any = {};
+        if (domain === 'qq.com' && !Number.isNaN(+id)) $set.avatar = `qq:${id}`;
+        if (this.session.viewLang) $set.viewLang = this.session.viewLang;
+        if (Object.keys($set).length) await user.setById(uid, $set);
+        this.session.viewLang = '';
         this.session.uid = uid;
         this.session.scpoe = PERM.PERM_ALL.toString();
         this.response.redirect = this.url('home_settings', { category: 'preference' });
