@@ -1,7 +1,7 @@
-# Bashu-OnlineJudge-NG
+# OneOJ
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/hydro-dev/hydro/CI)
-![npm](https://img.shields.io/npm/v/hydrooj?label=Bashu%20OnlineJudge-NG)
+![npm](https://img.shields.io/npm/v/hydrooj?label=OneOJ)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/hydro-dev/Hydro)
 
 欢迎 star 本项目，这是对开发者的鼓励。  
